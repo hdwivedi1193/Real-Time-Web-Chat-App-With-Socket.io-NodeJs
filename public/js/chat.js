@@ -27,7 +27,6 @@ socket.on("message",(getMessage)=>{
         time:moment(getMessage.time).format("h:mm a")
     })
 document.querySelector(".p-0").insertAdjacentHTML("beforeend",rendered)
-autoscroll()
 })
 
 // Client-Server Communication-Sending message from client to server
@@ -46,6 +45,9 @@ $messageForm.addEventListener("submit",(e)=>{
         if(error){
             return $.notify(error,"warn");
 
+
+        }else{
+            $.notify("Message Delivered","success");
 
         }
 
@@ -88,10 +90,14 @@ socket.on("shareLocation",(locationData)=>{
     })
 
     $sendLocationDiv.insertAdjacentHTML("beforeend",rendered)
-    autoscroll()
 })
 
-const autoscroll=()=>{
+//New Message Received text
+socket.on("newMessageReceived",(data)=>{
+    autoscroll("New Message Received")
+})
+
+const autoscroll=(message)=>{
     var container = document.querySelector('.p-0')
     container.maxScrollTop = container.scrollHeight - container.offsetHeight
 
@@ -101,7 +107,7 @@ const autoscroll=()=>{
       container.scrollTop = container.scrollHeight
 
     } else {
-        $.notify("New Message Received","success");
+        $.notify(message,"success");
 
     }
 

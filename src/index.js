@@ -38,6 +38,8 @@ socket.on("sendMessage",(messageText,callback)=>{
 
     if(!filter.isProfane(messageText)){
         io.to(getAUser.room).emit("message",getMessage(getAUser.username,messageText))
+        socket.broadcast.to(getAUser.room).emit("newMessageReceived",getMessage(getAUser.username,"New Message Received"))
+
         callback(undefined,"Message Delivered")
     }
 
@@ -49,6 +51,7 @@ socket.on("sendMessage",(messageText,callback)=>{
 socket.on("sendLocation",({latitude,longitude})=>{
     const getAUser=getCurrentUser(socket.id)
     io.to(getAUser.room).emit("shareLocation",getMessage(getAUser.username,`https://www.google.com/maps?q=${latitude},${longitude}`))
+    socket.broadcast.to(getAUser.room).emit("newMessageReceived",getMessage(getAUser.username,"New Message Received"))
 
 
 
